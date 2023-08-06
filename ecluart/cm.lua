@@ -59,7 +59,7 @@ function ConfigurationManager:constructor(collection)
 
   function self:set_collection(value)
     if not isTable(value) then
-      _collection = next(_collection) == nil and {} or _collection
+      _collection = next(_collection) ~= nil and _collection or {}
       return
     end
 
