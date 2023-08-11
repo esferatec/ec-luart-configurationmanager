@@ -8,7 +8,7 @@ The project is a configuration management module written in Lua. It defines a Ci
 [![LuaRT 1.5.1](https://badgen.net/badge/LuaRT/1.5.1/blue)](https://github.com/samyeyo/LuaRT)
 [![LuaCheck 1.1.1](https://badgen.net/badge/LuaCheck/1.1.1/green)](https://github.com/lunarmodules/luacheck)
 
-## Features (offen )
+## Features
 
 The project provides a modular and flexible way to manage configurations in desktop applications. It allows for easy addition of widgets and their corresponding configuration  keys, as well as applying settings to the widgets. The configuration manager can be customized by providing a collection table with settings. Several configuration  managers can be used in one application.
 
