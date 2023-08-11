@@ -1,2 +1,43 @@
 # ec-luart-configurationmanager
- virtual configuration manager for LuaRT
+
+The project is a configuration management module written in Lua. It defines a CinfigurationManager object that handles configuration of widgets in LuaRT desktop applications.
+
+![Screenshot of the Regisatrtion Form](/readme.png)
+
+[![Lua 5.4](https://badgen.net/badge/Lua/5.4/yellow)](https://github.com/lua/lua)
+[![LuaRT 1.5.1](https://badgen.net/badge/LuaRT/1.5.1/blue)](https://github.com/samyeyo/LuaRT)
+[![LuaCheck 1.1.1](https://badgen.net/badge/LuaCheck/1.1.1/green)](https://github.com/lunarmodules/luacheck)
+
+## Features (offen )
+
+The project provides a modular and flexible way to manage configurations in desktop applications. It allows for easy addition of widgets and their corresponding configuration  keys, as well as applying settings to the widgets. The configuration manager can be customized by providing a collection table with settings. Several configuration  managers can be used in one application.
+
+## Installation
+
+1. Create a folder called "ecluart" in your application.
+2. Copy the "cm.lua" file into this folder.
+
+```text
+[programm]
+|
+|----ecluart
+|   |
+|   |----cm.lua
+|   |----...
+|
+|----app.wlua
+```
+
+## Usage
+
+The configuration manager (cm) can be loaded using the function *require()*:
+
+```lua
+local cm = require("eclua.cm") 
+```
+
+## License
+
+Copyright (c) 2023 by esferatec.
+It is open source, released under the MIT License.
+See full copyright notice in the LICENSE.md file.

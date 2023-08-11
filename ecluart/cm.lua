@@ -1,41 +1,24 @@
 -- Defines a configuration management module.
 local cm = {}
 
-cm.customtypes = {}
-
 -- Checks if the parameter is a valid child widget.
 -- isValidChild(parameter: any) -> boolean
 local function isValidChild(parameter)
   local childType = type(parameter)
-  local validTypes = {
-    "Label",
-    "Button",
-    "Checkbox",
-    "Radiobutton",
-    "Groupbox",
-    "Entry",
-    "Edit",
-    "Combobox",
-    "List",
-    "Tab",
-    "Progressbar",
-    "Menu",
-    "Tree",
-    "Calendar",
-    "Picture",
-    "Window" }
+  local invalidTypes = {
+    "nil",
+    "boolean",
+    "number",
+    "string",
+    "userdata",
+    "function",
+    "thread" }
 
-  if type(cm.customtypes) == "table" then
-    for _, value in ipairs(cm.customtypes) do
-      table.insert(validTypes, tostring(value))
-    end
+  for _, invalidType in ipairs(invalidTypes) do
+      if string.find(childType, invalidType) then return false end
   end
 
-  for _, validType in ipairs(validTypes) do
-    if string.find(childType, validType) then return true end
-  end
-
-  return false
+  return true
 end
 
 -- Checks if the parameter is a table type.
@@ -97,6 +80,19 @@ function ConfigurationManager:apply()
   for _, child in ipairs(self.children) do
     local settingValue = self.collection[child.key]
     if settingValue then child.widget[child.property] = settingValue end
+  end
+end
+
+-- Gets the setting value for a key.
+-- setting(key: string) -> string
+function ConfigurationManager:setting(key)
+  if not isString(key) then return "" end
+
+  local settingValue = self.collection[key]
+  if not settingValue then
+    return ""
+  else
+    return settingValue
   end
 end
 
