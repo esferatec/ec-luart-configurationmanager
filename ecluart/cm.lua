@@ -89,11 +89,9 @@ function ConfigurationManager:setting(key)
   if not isString(key) then return "" end
 
   local settingValue = self.collection[key]
-  if not settingValue then
-    return ""
-  else
-    return settingValue
-  end
+  if not settingValue then return "" end
+
+  return settingValue
 end
 
 -- Initializes a new configuration manager instance.
