@@ -1,11 +1,11 @@
 # ec-luart-configurationmanager
 
-The project is a configuration management module written in Lua. It defines a CinfigurationManager object that handles configuration of widgets in LuaRT desktop applications.
+The project is a configuration management module written in Lua. It defines a ConfigurationManager object that handles configuration of widgets in LuaRT desktop applications.
 
 ![Screenshot of the Regisatrtion Form](/readme.png)
 
 [![Lua 5.4.6](https://badgen.net/badge/Lua/5.4.6/yellow)](https://github.com/lua/lua)
-[![LuaRT 1.5.2](https://badgen.net/badge/LuaRT/1.5.2/blue)](https://github.com/samyeyo/LuaRT)
+[![LuaRT 1.6.0](https://badgen.net/badge/LuaRT/1.6.0/blue)](https://github.com/samyeyo/LuaRT)
 [![LuaCheck 1.1.1](https://badgen.net/badge/LuaCheck/1.1.1/green)](https://github.com/lunarmodules/luacheck)
 
 ## Features
@@ -18,7 +18,7 @@ The project provides a modular and flexible way to manage configurations in desk
 2. Copy the "cm.lua" file into this folder.
 
 ```text
-[programm]
+[application]
 |
 |----ecluart
 |   |
