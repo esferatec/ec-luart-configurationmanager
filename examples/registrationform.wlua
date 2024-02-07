@@ -35,6 +35,8 @@ local cbbTextalign = ui.Combobox(winMain, { "left", "center", "right" }, 190, 25
 comMain:add(etyName, "textalign", "name_textalign")
 comMain:add(lblName, "fgcolor", "name_fgcolor")
 
+comMain.collection = app_settings
+
 cbbTextalign.text = comMain.collection["name_textalign"]
 
 function btnApply:onClick()

@@ -5,10 +5,18 @@ The code is a Lua module for managing configurations. It defines a Configuration
 ## Constructor
 
 ```Lua
-ConfigurationManager(collection: table) -> object
+ConfigurationManager() -> object
 ```
 
 This function, ConfigurationManager, initializes a new instance of the configuration manager. It takes a table parameter for the collection and returns a new instance of the ConfigurationManager object with the provided collection.
+
+## Property - collection
+
+```Lua
+ConfigurationManager.collection (table)
+```
+
+The collection property is expected to be a table containing the setting data.
 
 ## Method - add
 

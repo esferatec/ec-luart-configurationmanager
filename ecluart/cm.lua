@@ -4,7 +4,6 @@ local cm = {}
 -- Checks if the parameter is a valid child widget.
 -- isValidChild(parameter: any) -> boolean
 local function isValidChild(parameter)
-  local childType = type(parameter)
   local invalidTypes = {
     "nil",
     "boolean",
@@ -14,17 +13,7 @@ local function isValidChild(parameter)
     "function",
     "thread" }
 
-  for _, invalidType in ipairs(invalidTypes) do
-      if string.find(childType, invalidType) then return false end
-  end
-
-  return true
-end
-
--- Checks if the parameter is a table type.
--- isTable(parameter: any) -> boolean
-local function isTable(parameter)
-  return type(parameter) == "table"
+  return not table.concat(invalidTypes, ","):find(type(parameter))
 end
 
 -- Checks if the parameter is a string type.
@@ -33,11 +22,17 @@ local function isString(parameter)
   return type(parameter) == "string"
 end
 
+-- Checks if the parameter is a table type.
+-- isTable(parameter: any) -> boolean
+local function isTable(parameter)
+  return type(parameter) == "table"
+end
+
 -- Defines the configuration manager object.
 local ConfigurationManager = Object({})
 
 -- Creates the configuration manager constructor.
-function ConfigurationManager:constructor(collection)
+function ConfigurationManager:constructor()
   local _collection = {}
 
   function self:set_collection(value)
@@ -52,7 +47,6 @@ function ConfigurationManager:constructor(collection)
     return _collection
   end
 
-  self.collection = collection
   self.children = {}
 end
 
@@ -63,10 +57,11 @@ function ConfigurationManager:add(widget, property, key)
   if not isString(property) then return end
   if not isString(key) then return end
 
-  local newChild = {}
-  newChild.widget = widget
-  newChild.property = property
-  newChild.key = key
+  local newChild = {
+    widget = widget,
+    property = property,
+    key = key
+  }
 
   table.insert(self.children, newChild)
 end
@@ -78,7 +73,9 @@ function ConfigurationManager:apply()
 
   for _, child in ipairs(self.children) do
     local settingValue = self.collection[child.key]
-    if settingValue then child.widget[child.property] = settingValue end
+    if settingValue then
+      child.widget[child.property] = settingValue
+    end
   end
 end
 
@@ -86,17 +83,13 @@ end
 -- setting(key: string) -> string
 function ConfigurationManager:setting(key)
   if not isString(key) then return "" end
-
-  local settingValue = self.collection[key]
-  if not settingValue then return "" end
-
-  return settingValue
+  return self.collection[key]
 end
 
 -- Initializes a new configuration manager instance.
--- ConfigurationManager(collection: table) -> object
-function cm.ConfigurationManager(collection)
-  return ConfigurationManager(collection)
+-- ConfigurationManager() -> object
+function cm.ConfigurationManager()
+  return ConfigurationManager()
 end
 
 return cm
