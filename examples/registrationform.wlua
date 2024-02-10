@@ -32,19 +32,19 @@ local btnApply = ui.Button(winMain, "Apply Configuartion", 10, 210, 380)
 local lblTextalign = ui.Label(winMain, "Textalign setting for Name Entry:", 10, 255)
 local cbbTextalign = ui.Combobox(winMain, { "left", "center", "right" }, 190, 250, 80)
 
+comMain.settings = app_settings
+
 comMain:add(etyName, "textalign", "name_textalign")
 comMain:add(lblName, "fgcolor", "name_fgcolor")
 
-comMain.collection = app_settings
-
-cbbTextalign.text = comMain.collection["name_textalign"]
+cbbTextalign.text = comMain:setting("name_textalign")
 
 function btnApply:onClick()
   comMain:apply()
 end
 
 function cbbTextalign:onSelect(item)
-  comMain.collection["name_textalign"] = item.text
+  comMain:update("name_textalign", item.text)
 end
 
 winMain:show()

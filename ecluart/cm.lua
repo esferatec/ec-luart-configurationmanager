@@ -1,5 +1,5 @@
 -- Defines a configuration management module.
-local cm = {}
+local cm = {} -- version 2.0
 
 -- Checks if the parameter is a valid child widget.
 -- isValidChild(parameter: any) -> boolean
@@ -22,6 +22,12 @@ local function isString(parameter)
   return type(parameter) == "string"
 end
 
+-- Checks if the parameter is a nil type.
+-- isNil(parameter: any) -> boolean
+local function isNil(parameter)
+  return type(parameter) == "nil"
+end
+
 -- Checks if the parameter is a table type.
 -- isTable(parameter: any) -> boolean
 local function isTable(parameter)
@@ -33,18 +39,18 @@ local ConfigurationManager = Object({})
 
 -- Creates the configuration manager constructor.
 function ConfigurationManager:constructor()
-  local _collection = {}
+  local _settings = {}
 
-  function self:set_collection(value)
+  function self:set_settings(value)
     if not isTable(value) then
       value = {}
     end
 
-    _collection = value
+    _settings = value
   end
 
-  function self:get_collection()
-    return _collection
+  function self:get_settings()
+    return _settings
   end
 
   self.children = {}
@@ -69,10 +75,8 @@ end
 -- Sets the setting value for each widget.
 -- apply() -> none
 function ConfigurationManager:apply()
-  if next(self.collection) == nil then return end
-
   for _, child in ipairs(self.children) do
-    local settingValue = self.collection[child.key]
+    local settingValue = self.settings[child.key]
     if settingValue then
       child.widget[child.property] = settingValue
     end
@@ -83,7 +87,17 @@ end
 -- setting(key: string) -> string
 function ConfigurationManager:setting(key)
   if not isString(key) then return "" end
-  return self.collection[key]
+  return self.settings[key] or ""
+end
+
+-- Updates the setting value for a key.
+-- update(key: string, value: any) -> none
+function ConfigurationManager:update(key, value)
+  if not isString(key) then return end
+
+ if not isNil(self.settings[key]) then
+    self.settings[key] = value
+ end
 end
 
 -- Initializes a new configuration manager instance.
