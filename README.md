@@ -82,6 +82,14 @@ ConfigurationManager:update(key: string, value: any) -> none
 
 The code provided is a function called update in the ConfigurationManager class. This function is responsible for updating the value of a setting based on a given key. The method takes two parameters: key (string) and value (any data type). These parameters represent the key and the new value to be updated.
 
+## Method - save
+
+```Lua
+ConfigurationManager:save() -> none
+```
+
+This function saves the setting value for each widget in the configuration manager. It iterates over each child in the self.children table and stores the setting value to the self.settings table using the child's property. If a setting value exists, it sets the setting's entry to the setting value.
+
 ## License
 
 Copyright (c) 2023 by esferatec.

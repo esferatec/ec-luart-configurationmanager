@@ -1,5 +1,7 @@
+local ui = require("ui")
+
 -- Defines a configuration management module.
-local cm = {} -- version 2.0
+local cm = {} -- version 2.1
 
 -- Checks if the parameter is a valid child widget.
 -- isValidChild(parameter: any) -> boolean
@@ -77,7 +79,7 @@ end
 function ConfigurationManager:apply()
   for _, child in ipairs(self.children) do
     local settingValue = self.settings[child.key]
-    if settingValue then
+    if not isNil(settingValue) then
       child.widget[child.property] = settingValue
     end
   end
@@ -95,9 +97,21 @@ end
 function ConfigurationManager:update(key, value)
   if not isString(key) then return end
 
- if not isNil(self.settings[key]) then
+  if not isNil(self.settings[key]) then
     self.settings[key] = value
- end
+  end
+end
+
+-- Saves the setting value for each widget.
+-- save() -> none
+function ConfigurationManager:save()
+  for _, child in ipairs(self.children) do
+    local settingValue = child.widget[child.property]
+
+    if not isNil(settingValue) then
+      self.settings[child.key] = settingValue
+    end
+  end
 end
 
 -- Initializes a new configuration manager instance.
