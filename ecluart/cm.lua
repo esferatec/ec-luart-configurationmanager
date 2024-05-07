@@ -1,5 +1,3 @@
-local ui = require("ui")
-
 -- Defines a configuration management module.
 local cm = {} -- version 2.1
 
