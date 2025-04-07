@@ -78,7 +78,7 @@ function ConfigurationManager:apply()
   for _, child in ipairs(self.children) do
     local settingValue = self.settings[child.key]
 
-    if not settingValue then
+    if not isNil(settingValue) then
       child.widget[child.property] = settingValue
     end
   end
@@ -107,7 +107,7 @@ function ConfigurationManager:save()
   for _, child in ipairs(self.children) do
     local settingValue = child.widget[child.property]
 
-    if not settingValue then
+    if not isNil(settingValue) then
       self.settings[child.key] = settingValue
     end
   end
