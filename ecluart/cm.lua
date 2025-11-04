@@ -1,5 +1,5 @@
 -- Defines a configuration management module.
-local cm = {} -- version 2025.04
+local cm = {} -- version 2025.11
 
 -- Checks if the parameter is a valid child widget.
 -- isValidChild(parameter: any) -> boolean
@@ -17,21 +17,21 @@ local function isValidChild(parameter)
 end
 
 -- Checks if the parameter is a string type.
--- isString(parameter: any) -> boolean
-local function isString(parameter)
+-- isStringType(parameter: any) -> boolean
+local function isStringType(parameter)
   return type(parameter) == "string"
 end
 
--- Checks if the parameter is a nil type.
--- isNil(parameter: any) -> boolean
-local function isNil(parameter)
-  return type(parameter) == "nil"
+-- Checks if the paramter is a function type.
+-- isFunctionType(parameter: any) -> boolean
+local function isFunctionType(parameter)
+  return type(parameter) == "function"
 end
 
--- Checks if the parameter is a table type.
--- isTable(parameter: any) -> boolean
-local function isTable(parameter)
-  return type(parameter) == "table"
+-- Checks if the parameter is a nil type.
+-- isNilType(parameter: any) -> boolean
+local function isNilType(parameter)
+  return type(parameter) == "nil"
 end
 
 -- Defines the configuration manager object.
@@ -39,65 +39,41 @@ local ConfigurationManager = Object({})
 
 -- Creates the configuration manager constructor.
 function ConfigurationManager:constructor()
-  local _settings = {}
-
-  function self:set_settings(value)
-    if not isTable(value) then
-      value = {}
-    end
-
-    _settings = value
-  end
-
-  function self:get_settings()
-    return _settings
-  end
-
+  self.setting = {}
   self.children = {}
 end
 
--- Adds a widget, property and configration key.
--- add(widget: object, property: string, key: string) -> none
+-- Adds a widget, property, setting key, key type and default value.
+-- add(widget: object, property: string, key: string, type: function, default: any) -> none
 function ConfigurationManager:add(widget, property, key)
   if not isValidChild(widget) then return end
-  if not isString(property) then return end
-  if not isString(key) then return end
+  if not isStringType(property) then return end
+  if not isStringType(key) then return end
+  if not isNilType(type) and not isFunctionType(type) then return end
+  if not isStringType(property) then return end
+  if property == "" then return end
+  if key == "" then return end
 
   local newChild = {
     widget = widget,
     property = property,
-    key = key
+    key = key,
+    type = type,
+    default = default
   }
 
   table.insert(self.children, newChild)
 end
 
--- Sets the setting value for each widget.
--- apply() -> none
-function ConfigurationManager:apply()
+-- Loads the setting value for each widget.
+-- load() -> none
+function ConfigurationManager:load()
   for _, child in ipairs(self.children) do
-    local settingValue = self.settings[child.key]
+    local settingValue = self.setting[child.key]
 
-    if not isNil(settingValue) then
+    if not isNilType(settingValue) then
       child.widget[child.property] = settingValue
     end
-  end
-end
-
--- Gets the setting value for a key.
--- setting(key: string) -> string
-function ConfigurationManager:setting(key)
-  if not isString(key) then return "" end
-  return self.settings[key] or ""
-end
-
--- Updates the setting value for a key.
--- update(key: string, value: any) -> none
-function ConfigurationManager:update(key, value)
-  if not isString(key) then return end
-
-  if not isNil(self.settings[key]) then
-    self.settings[key] = value
   end
 end
 
@@ -105,12 +81,36 @@ end
 -- save() -> none
 function ConfigurationManager:save()
   for _, child in ipairs(self.children) do
-    local settingValue = child.widget[child.property]
+    local widgetValue = child.widget[child.property]
 
-    if not isNil(settingValue) then
-      self.settings[child.key] = settingValue
+    if not isNilType(widgetValue) then
+      self.setting[child.key] = isNilType(child.type) and widgetValue or child.type(widgetValue)
     end
   end
+end
+
+-- Sets the default value for each widget.
+-- default() -> none
+function ConfigurationManager:default()
+  for _, child in ipairs(self.children) do
+    child.widget[child.property] = child.default
+  end
+end
+
+-- Gets the setting value for a key.
+-- value(key: string) -> string
+function ConfigurationManager:value(key)
+  if not isStringType(key) then return end
+  if key == "" then return end
+  return self.setting[key] or nil
+end
+
+-- Updates the setting value for a key.
+-- update(key: string, value: any) -> none
+function ConfigurationManager:update(key, value)
+  if not isStringType(key) then return end
+  if key == "" then return end
+  self.setting[key] = value
 end
 
 -- Initializes a new configuration manager instance.
