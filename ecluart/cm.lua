@@ -71,7 +71,7 @@ end
 function ConfigurationManager:load()
   for _, child in ipairs(self.children) do
     local settingValue = self.setting[child.key]
-    child.widget[child.property] = settingValue
+    child.widget[child.property] = settingValue and settingValue or child.default
   end
 end
 
