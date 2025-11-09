@@ -5,15 +5,16 @@ local cm = {} -- version 2025.11
 -- isValidChild(parameter: any) -> boolean
 local function isValidChild(parameter)
   local invalidTypes = {
-    "nil",
-    "boolean",
-    "number",
-    "string",
-    "userdata",
-    "function",
-    "thread" }
+    ["nil"] = true,
+    ["boolean"] = true,
+    ["number"] = true,
+    ["string"] = true,
+    ["userdata"] = true,
+    ["function"] = true,
+    ["thread"] = true
+  }
 
-  return not table.concat(invalidTypes, ","):find(type(parameter))
+  return not invalidTypes[type(parameter)]
 end
 
 -- Checks if the parameter is a string type.
@@ -43,14 +44,14 @@ function ConfigurationManager:constructor()
   self.children = {}
 end
 
--- Adds a widget, property, setting key, key type and default value.
--- add(widget: object, property: string, key: string, type: function, default: any) -> none
-function ConfigurationManager:add(widget, property, key)
+-- Adds a widget, widget property, setting key, key converter and default value.
+-- add(widget: object, property: string, key: string, converter: function, default: any) -> none
+function ConfigurationManager:add(widget, property, key, converter, default)
   if not isValidChild(widget) then return end
   if not isStringType(property) then return end
   if not isStringType(key) then return end
-  if not isNilType(type) and not isFunctionType(type) then return end
-  if not isStringType(property) then return end
+  if not isNilType(converter) and not isFunctionType(converter) then return end
+  if not isStringType(default) then return end
   if property == "" then return end
   if key == "" then return end
 
@@ -58,7 +59,7 @@ function ConfigurationManager:add(widget, property, key)
     widget = widget,
     property = property,
     key = key,
-    type = type,
+    converter = converter,
     default = default
   }
 
@@ -70,10 +71,7 @@ end
 function ConfigurationManager:load()
   for _, child in ipairs(self.children) do
     local settingValue = self.setting[child.key]
-
-    if not isNilType(settingValue) then
-      child.widget[child.property] = settingValue
-    end
+    child.widget[child.property] = settingValue
   end
 end
 
@@ -82,10 +80,7 @@ end
 function ConfigurationManager:save()
   for _, child in ipairs(self.children) do
     local widgetValue = child.widget[child.property]
-
-    if not isNilType(widgetValue) then
-      self.setting[child.key] = isNilType(child.type) and widgetValue or child.type(widgetValue)
-    end
+    self.setting[child.key] = child.converter and child.converter(widgetValue) or widgetValue
   end
 end
 

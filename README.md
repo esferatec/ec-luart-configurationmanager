@@ -51,10 +51,10 @@ Table containing the setting data.
 ## Method - add
 
 ```Lua
-ConfigurationManager:add(widget: object, property: string, key: string, type: function, default: any) -> none
+ConfigurationManager:add(widget: object, property: string, key: string, converter: function, default: any) -> none
 ```
 
-Adds a widget, property, setting key, key type and default value.
+Adds a widget, widget property, setting key, key converter and default value.
 
 ## Method - load
 
